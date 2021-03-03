@@ -9,7 +9,7 @@ const int AVG_ARRIVAL_TIME_STATION_1 = 14; // avg per hour
 const int AVG_ARRIVAL_TIME_STATION_2 = 10; // avg per hour
 const int AVG_ARRIVAL_TIME_STATION_3 = 24; // avg per hour
 const double MAX_TIME = 80 * 60.0; // minutes
-const double BUS_SPEED = 30.0 / 60.0; // 30 miles per hour -->> speed per minutes
+const double BUS_SPEED = 30.0 / 60.0; // 30 miles per hour --> speed per minutes
 
 // For Random Functions
 mt19937 rng32(chrono::steady_clock::now().time_since_epoch().count());
@@ -106,11 +106,6 @@ struct Bus {
         // load
         while (get_num_of_passengers() < MAX_CAPACITY && !st.queue_line.empty() && st.queue_line.front().arrival_time <= mxclock && simclock < MAX_TIME) {
             double load_time = ((double) get_uniform_int_distribution(15, 25)) / 60.0;
-            if (st_num == 1) {
-                cerr << "-----\n";
-                cerr << "[1] " << simclock << '\n';
-                cerr << "-----\n";
-            }
             Person temp = st.depart(simclock);
             simclock += load_time;
             mxclock = max(mxclock, simclock);
@@ -136,8 +131,7 @@ void initialize() {
     {
         double last_time = 0.0;
         while (1) {
-            double inter = expon(AVG_ARRIVAL_TIME_STATION_1) * 60.0;
-            cerr << "[I] " << inter << '\n';
+            double inter = expon((double) 1.0 / AVG_ARRIVAL_TIME_STATION_1) * 60.0;
             if (last_time + inter > MAX_TIME) break;
             last_time += inter;
             int loc = 1;
@@ -150,7 +144,7 @@ void initialize() {
     {
         double last_time = 0.0;
         while (1) {
-            double inter = expon(AVG_ARRIVAL_TIME_STATION_2) * 60.0;
+            double inter = expon((double) 1.0 / AVG_ARRIVAL_TIME_STATION_2) * 60.0;
             if (last_time + inter > MAX_TIME) break;
             last_time += inter;
             int loc = 2;
@@ -163,14 +157,13 @@ void initialize() {
     {
         double last_time = 0.0;
         while (1) {
-            double inter = expon(AVG_ARRIVAL_TIME_STATION_3) * 60.0;
+            double inter = expon((double) 1.0 / AVG_ARRIVAL_TIME_STATION_3) * 60.0;
             if (last_time + inter > MAX_TIME) break;
             last_time += inter;
             int loc = 3;
             int dest;
             {
                 int temp = get_uniform_int_distribution(1, 1000);
-                cerr << "[T] " << temp << '\n';
                 if (temp <= 583) { // 0.583 chance to go to station 1
                     dest = 1;
                 } else {
@@ -183,10 +176,10 @@ void initialize() {
     for (int i = 1; i <= NUM_OF_STATION; i++) {
         cerr << "-----\n";
         cerr << "[S] " << i << " => " << station[i].queue_line.size() << '\n';
-        for (Person& p : station[i].queue_line) {
-            cerr << "[P] " << p.destination << '\n';
-        }
-        cerr << "-----\n";
+        // for (Person& p : station[i].queue_line) {
+        //     cerr << "[P] " << p.destination << '\n';
+        // }
+        // cerr << "-----\n";
     }
 }
 
@@ -226,9 +219,10 @@ int main() {
         //arrived at station 3
         bus.transit(station[3]);
         if (simclock >= MAX_TIME) break;
-        cerr << "[+] " << simclock << '\n';
+        // cerr << "[+] " << simclock << '\n';
     }
     cerr << "FINISHED";
+    // TODO: Add Statistics
 
     return 0;    
 }
