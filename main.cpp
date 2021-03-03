@@ -3,6 +3,7 @@
 using namespace std;
 
 // Define Constants
+const int CAR_RENTAL = 3;
 const int NUM_OF_STATION = 3;
 const int MAX_CAPACITY = 20;
 const int AVG_ARRIVAL_TIME_STATION_1 = 14; // avg per hour
@@ -68,6 +69,7 @@ struct Bus {
     double max_time_at_station[NUM_OF_STATION + 1];
     double avg_time_at_station[NUM_OF_STATION + 1];
     double num_at_station[NUM_OF_STATION + 1];
+    vector<double> timestamps_depart_from_car_rental;
 
     Bus() {
         for (int i = 1; i <= NUM_OF_STATION; i++) {
@@ -114,6 +116,10 @@ struct Bus {
         }
 
         simclock = mxclock;
+
+        if (st_num == CAR_RENTAL) {
+            timestamps_depart_from_car_rental.push_back(simclock);
+        }
 
         double time_in_station = simclock - initialclock;
         min_time_at_station[st_num] = min(min_time_at_station[st_num], time_in_station);
@@ -262,10 +268,31 @@ int main() {
     }
     cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
 
-
+    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // e1. average time for the bus to make a loop
     // e2. maximum time for the bus to make a loop
     // e3. minimum time for the bus to make a loop
+    if (bus.timestamps_depart_from_car_rental.size() <= 1) {
+        cerr << "The bus did not make any single loop\n";
+    } else {
+        double avg_loop_time = 0.0;
+        double max_loop_time = 0.0;
+        double min_loop_time = INT_MAX;
+        for (int i = 1; i < bus.timestamps_depart_from_car_rental.size(); i++) {
+            double loop_time = bus.timestamps_depart_from_car_rental[i] - bus.timestamps_depart_from_car_rental[i - 1];
+            avg_loop_time = (avg_loop_time * (i - 1) + loop_time) / i;
+            max_loop_time = max(max_loop_time, loop_time);
+            min_loop_time = min(min_loop_time, loop_time);
+        }
+        cerr << "Average bus loop time is: " << avg_loop_time << " minutes\n";
+        cerr << "Maximum bus loop time is: " << max_loop_time << " minutes\n";
+        cerr << "Minimum bus loop time is: " << min_loop_time << " minutes\n";
+    }
+
+    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
+
+
+
     // f1. average time a person is in the system by arrival location
     // f2. maximum time a person is in the system by arrival location
     // f3. minimum time a person is in the system by arrival location
