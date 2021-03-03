@@ -228,6 +228,7 @@ int main() {
     // a1. average number in each queue
     // a2. maximum number in each queue
 
+    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // b1. average delay in each queue
     // b2. maximum delay in each queue
     for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
@@ -239,15 +240,29 @@ int main() {
             max_delay = max(max_delay, temp_delay);
             avg_delay = (avg_delay * i + temp_delay) / (i + 1);
         }
-        cerr << "Average Delay for Station " << st_num << " is: " << avg_delay << '\n';
-        cerr << "Maximum Delay for Station " << st_num << " is: " << max_delay << '\n';
+        cerr << "Average Delay for Station " << st_num << " is: " << avg_delay << " minutes\n";
+        cerr << "Maximum Delay for Station " << st_num << " is: " << max_delay << " minutes\n";
     }
+    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
 
     // c1. average number on the bus
     // c2. maximum number on the bus
+
+    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // d1. average time the bus is stopped at each location 
     // d2. maximum time the bus is stopped at each location 
     // d3. minimum time the bus is stopped at each location 
+    for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
+        double min_time_at_station = bus.min_time_at_station[st_num];
+        double max_time_at_station = bus.max_time_at_station[st_num];
+        double avg_time_at_station = bus.avg_time_at_station[st_num];
+        cerr << "Average time bus stopped at station " << st_num << " is: " << avg_time_at_station << " minutes\n";
+        cerr << "Maximum time bus stopped at station " << st_num << " is: " << max_time_at_station << " minutes\n";
+        cerr << "Minimum time bus stopped at station " << st_num << " is: " << min_time_at_station << " minutes\n";
+    }
+    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
+
+
     // e1. average time for the bus to make a loop
     // e2. maximum time for the bus to make a loop
     // e3. minimum time for the bus to make a loop
