@@ -224,5 +224,23 @@ int main() {
     cerr << "FINISHED";
     // TODO: Add Statistics
 
+    // a1. average number in each queue
+    // a2. maximum number in each queue
+    // b1. average delay in each queue
+    // b2. maximum delay in each queue
+    // c1. average number on the bus
+    // c2. maximum number on the bus
+    // d1. average time the bus is stopped at each location 
+    // d2. maximum time the bus is stopped at each location 
+    // d3. minimum time the bus is stopped at each location 
+    // e1. average time for the bus to make a loop
+    // e2. maximum time for the bus to make a loop
+    // e3. minimum time for the bus to make a loop
+    // f1. average time a person is in the system by arrival location
+    // f2. maximum time a person is in the system by arrival location
+    // f3. minimum time a person is in the system by arrival location
+    
+
+
     return 0;    
 }
