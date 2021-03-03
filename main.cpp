@@ -222,12 +222,27 @@ int main() {
         // cerr << "[+] " << simclock << '\n';
     }
     cerr << "FINISHED";
+    cerr << "\n-------------------------------------------------\n";
     // TODO: Add Statistics
 
     // a1. average number in each queue
     // a2. maximum number in each queue
+
     // b1. average delay in each queue
     // b2. maximum delay in each queue
+    for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
+        double avg_delay = 0.0;
+        double max_delay = 0.0;
+        for (int i = 0; i < station[st_num].departed.size(); i++) {
+            Person& person = station[st_num].departed[i];
+            double temp_delay = person.departure_time - person.arrival_time;
+            max_delay = max(max_delay, temp_delay);
+            avg_delay = (avg_delay * i + temp_delay) / (i + 1);
+        }
+        cerr << "Average Delay for Station " << st_num << " is: " << avg_delay << '\n';
+        cerr << "Maximum Delay for Station " << st_num << " is: " << max_delay << '\n';
+    }
+
     // c1. average number on the bus
     // c2. maximum number on the bus
     // d1. average time the bus is stopped at each location 
