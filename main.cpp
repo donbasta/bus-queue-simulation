@@ -288,37 +288,44 @@ int main() {
     }
     cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
 
+    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // c1. average number on the bus
     // c2. maximum number on the bus
     {   
-        // vector<pair<double, int>> events;
-        // for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
-        //     for (int i = 0; i < bus.passengers[st_num].size(); i++) {
-        //         Person& person = station[st_num].departed[i];
-        //         events.push_back(make_pair(person.arrival_time, 0));
-        //         events.push_back(make_pair(person.departure_time, 1));
-        //     }
-        //     for (int i = 0; i < station[st_num].queue_line.size(); i++) {
-        //         Person& person = station[st_num].departed[i];
-        //         events.push_back(make_pair(person.arrival_time, 0));
-        //     }
-        //     sort(events.begin(), events.end());
+        vector<pair<double, int>> events;
+        for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
+            for (int i = 0; i < bus.passengers[st_num].size(); i++) {
+                Person& person = bus.passengers[st_num][i];
+                events.push_back(make_pair(person.bus_in_time, 0));
+            }
+        }
+        for (int i = 0; i < bus.arrived.size(); i++) {
+            Person& person = bus.arrived[i];
+            events.push_back(make_pair(person.bus_in_time, 0));
+            events.push_back(make_pair(person.bus_out_time, 1));
+        }
+        sort(events.begin(), events.end());
 
-        //     for (auto& event : events) {
-        //         if (event.first != 0.0) {
-        //             avg_number = (avg_number * temp_simclock + (double) current_number * (event.first - temp_simclock)) / event.first;
-        //         }
-        //         temp_simclock = event.first;
-        //         current_number = (current_number + (event.second == 0 ? 1 : -1));
-        //         max_number = max(max_number, current_number);
-        //     }
+        double avg_number = 0.0;
+        double temp_simclock = 0.0;
+        int max_number = 0;
+        int current_number = 0;
 
-        //     avg_number = (avg_number * temp_simclock + (double) current_number * (simclock - temp_simclock)) / simclock;
+        for (auto& event : events) {
+            if (event.first != 0.0) {
+                avg_number = (avg_number * temp_simclock + (double) current_number * (event.first - temp_simclock)) / event.first;
+            }
+            temp_simclock = event.first;
+            current_number = (current_number + (event.second == 0 ? 1 : -1));
+            max_number = max(max_number, current_number);
+        }
 
-        //     cerr << "Average Number of People in Station " << st_num << " is: " << avg_number << "\n";
-        //     cerr << "Maximum Number of People in Station " << st_num << " is: " << max_number << "\n";
-        // }
+        avg_number = (avg_number * temp_simclock + (double) current_number * (simclock - temp_simclock)) / simclock;
+
+        cerr << "Average Number of People in Bus is: " << avg_number << "\n";
+        cerr << "Maximum Number of People in Bus is: " << max_number << "\n";
     }
+    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
 
     cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // d1. average time the bus is stopped at each location 
@@ -357,11 +364,63 @@ int main() {
 
     cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
 
-
-
+    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // f1. average time a person is in the system by arrival location
     // f2. maximum time a person is in the system by arrival location
     // f3. minimum time a person is in the system by arrival location
+    {
+        double avg_time[NUM_OF_STATION + 1];
+        double max_time[NUM_OF_STATION + 1];
+        double min_time[NUM_OF_STATION + 1];
+        int count[NUM_OF_STATION];
+        for (int i = 1; i <= NUM_OF_STATION; i++) {
+            avg_time[i] = 0.0;
+            max_time[i] = 0.0;
+            min_time[i] = INT_MAX;
+            count[i] = 0;
+        }
+
+        for (int i = 0; i < bus.arrived.size(); i++) {
+            Person& person = bus.arrived[i];
+            int st_num = person.arrival_location;
+            double time_in_system = person.bus_out_time - person.arrival_time;
+            max_time[st_num] = max(max_time[st_num], time_in_system);
+            min_time[st_num] = min(min_time[st_num], time_in_system);
+            avg_time[st_num] = (avg_time[st_num] * count[st_num] + time_in_system) / (count[st_num] + 1);
+            count[st_num]++;
+        }
+        
+        //handling passengers which are still on the bus when the simulation ends
+        for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
+            for (int i = 0; i < bus.passengers[st_num].size(); i++) {
+                Person& person = bus.passengers[st_num][i];
+                double time_in_system = simclock - person.arrival_time;
+                max_time[st_num] = max(max_time[st_num], time_in_system);
+                min_time[st_num] = min(min_time[st_num], time_in_system);
+                avg_time[st_num] = (avg_time[st_num] * count[st_num] + time_in_system) / (count[st_num] + 1);
+                count[st_num]++;
+            }
+        }
+
+        //handling passengers which are still in the station when the simulation ends
+        for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
+            for (int i = 0; i < station[st_num].queue_line.size(); i++) {
+                Person& person = station[st_num].queue_line[i];
+                double time_in_system = simclock - person.arrival_time;
+                max_time[st_num] = max(max_time[st_num], time_in_system);
+                min_time[st_num] = min(min_time[st_num], time_in_system);
+                avg_time[st_num] = (avg_time[st_num] * count[st_num] + time_in_system) / (count[st_num] + 1);
+                count[st_num]++;
+            }
+        }   
+
+        for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
+            cerr << "Average time the people from station " << st_num << " in the system is: " << avg_time[st_num] << " minutes\n";
+            cerr << "Maximum time a person from station " << st_num << " in the system is: " << max_time[st_num] << " minutes\n";
+            cerr << "Minimum time a person from station " << st_num << " in the system is: " << min_time[st_num] << " minutes\n";
+        }
+    }
+    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
     
 
 
