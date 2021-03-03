@@ -231,8 +231,44 @@ int main() {
     cerr << "\n-------------------------------------------------\n";
     // TODO: Add Statistics
 
+    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // a1. average number in each queue
     // a2. maximum number in each queue
+    {
+        for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
+            vector<pair<double, int>> events;
+            int current_number = 0;
+            double temp_simclock = 0.0;
+            int max_number = 0;
+            double avg_number = 0.0;
+
+            for (int i = 0; i < station[st_num].departed.size(); i++) {
+                Person& person = station[st_num].departed[i];
+                events.push_back(make_pair(person.arrival_time, 0));
+                events.push_back(make_pair(person.departure_time, 1));
+            }
+            for (int i = 0; i < station[st_num].queue_line.size(); i++) {
+                Person& person = station[st_num].departed[i];
+                events.push_back(make_pair(person.arrival_time, 0));
+            }
+            sort(events.begin(), events.end());
+
+            for (auto& event : events) {
+                if (event.first != 0.0) {
+                    avg_number = (avg_number * temp_simclock + (double) current_number * (event.first - temp_simclock)) / event.first;
+                }
+                temp_simclock = event.first;
+                current_number = (current_number + (event.second == 0 ? 1 : -1));
+                max_number = max(max_number, current_number);
+            }
+
+            avg_number = (avg_number * temp_simclock + (double) current_number * (simclock - temp_simclock)) / simclock;
+
+            cerr << "Average Number of People in Station " << st_num << " is: " << avg_number << "\n";
+            cerr << "Maximum Number of People in Station " << st_num << " is: " << max_number << "\n";
+        }
+    }
+    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
 
     cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // b1. average delay in each queue
