@@ -111,6 +111,7 @@ struct Bus {
             Person temp = st.depart(simclock);
             simclock += load_time;
             mxclock = max(mxclock, simclock);
+            temp.bus_in_time = simclock;
 
             passengers[temp.destination].push_back(temp);
         }
@@ -289,6 +290,35 @@ int main() {
 
     // c1. average number on the bus
     // c2. maximum number on the bus
+    {   
+        // vector<pair<double, int>> events;
+        // for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
+        //     for (int i = 0; i < bus.passengers[st_num].size(); i++) {
+        //         Person& person = station[st_num].departed[i];
+        //         events.push_back(make_pair(person.arrival_time, 0));
+        //         events.push_back(make_pair(person.departure_time, 1));
+        //     }
+        //     for (int i = 0; i < station[st_num].queue_line.size(); i++) {
+        //         Person& person = station[st_num].departed[i];
+        //         events.push_back(make_pair(person.arrival_time, 0));
+        //     }
+        //     sort(events.begin(), events.end());
+
+        //     for (auto& event : events) {
+        //         if (event.first != 0.0) {
+        //             avg_number = (avg_number * temp_simclock + (double) current_number * (event.first - temp_simclock)) / event.first;
+        //         }
+        //         temp_simclock = event.first;
+        //         current_number = (current_number + (event.second == 0 ? 1 : -1));
+        //         max_number = max(max_number, current_number);
+        //     }
+
+        //     avg_number = (avg_number * temp_simclock + (double) current_number * (simclock - temp_simclock)) / simclock;
+
+        //     cerr << "Average Number of People in Station " << st_num << " is: " << avg_number << "\n";
+        //     cerr << "Maximum Number of People in Station " << st_num << " is: " << max_number << "\n";
+        // }
+    }
 
     cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // d1. average time the bus is stopped at each location 
