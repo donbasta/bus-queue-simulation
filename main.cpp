@@ -180,10 +180,6 @@ void initialize() {
             station[3].queue_line.push_back(Person(last_time, loc, dest));
         }
     }
-    for (int i = 1; i <= NUM_OF_STATION; i++) {
-        cout << "-----\n";
-        cout << "[S] " << i << " => " << station[i].queue_line.size() << '\n';
-    }
 }
 
 int main() {
