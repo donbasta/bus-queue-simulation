@@ -249,7 +249,7 @@ int main() {
                 events.push_back(make_pair(person.departure_time, 1));
             }
             for (int i = 0; i < station[st_num].queue_line.size(); i++) {
-                Person& person = station[st_num].departed[i];
+                Person& person = station[st_num].queue_line[i];
                 events.push_back(make_pair(person.arrival_time, 0));
             }
             sort(events.begin(), events.end());
@@ -389,30 +389,6 @@ int main() {
             avg_time[st_num] = (avg_time[st_num] * count[st_num] + time_in_system) / (count[st_num] + 1);
             count[st_num]++;
         }
-        
-        // //handling passengers which are still on the bus when the simulation ends
-        // for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
-        //     for (int i = 0; i < bus.passengers[st_num].size(); i++) {
-        //         Person& person = bus.passengers[st_num][i];
-        //         double time_in_system = simclock - person.arrival_time;
-        //         max_time[st_num] = max(max_time[st_num], time_in_system);
-        //         min_time[st_num] = min(min_time[st_num], time_in_system);
-        //         avg_time[st_num] = (avg_time[st_num] * count[st_num] + time_in_system) / (count[st_num] + 1);
-        //         count[st_num]++;
-        //     }
-        // }
-
-        // //handling passengers which are still in the station when the simulation ends
-        // for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
-        //     for (int i = 0; i < station[st_num].queue_line.size(); i++) {
-        //         Person& person = station[st_num].queue_line[i];
-        //         double time_in_system = simclock - person.arrival_time;
-        //         max_time[st_num] = max(max_time[st_num], time_in_system);
-        //         min_time[st_num] = min(min_time[st_num], time_in_system);
-        //         avg_time[st_num] = (avg_time[st_num] * count[st_num] + time_in_system) / (count[st_num] + 1);
-        //         count[st_num]++;
-        //     }
-        // }   
 
         for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
             cerr << "Average time the people from station " << st_num << " in the system is: " << avg_time[st_num] << " minutes\n";
