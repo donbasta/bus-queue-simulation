@@ -181,12 +181,8 @@ void initialize() {
         }
     }
     for (int i = 1; i <= NUM_OF_STATION; i++) {
-        cerr << "-----\n";
-        cerr << "[S] " << i << " => " << station[i].queue_line.size() << '\n';
-        // for (Person& p : station[i].queue_line) {
-        //     cerr << "[P] " << p.destination << '\n';
-        // }
-        // cerr << "-----\n";
+        cout << "-----\n";
+        cout << "[S] " << i << " => " << station[i].queue_line.size() << '\n';
     }
 }
 
@@ -226,13 +222,12 @@ int main() {
         //arrived at station 3
         bus.transit(station[3]);
         if (simclock >= MAX_TIME) break;
-        // cerr << "[+] " << simclock << '\n';
+        // cout << "[+] " << simclock << '\n';
     }
-    cerr << "FINISHED";
-    cerr << "\n-------------------------------------------------\n";
-    // TODO: Add Statistics
-
-    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
+    cout << "FINISHED";
+    cout << "\n-------------------------------------------------\n";
+    simclock = MAX_TIME;
+    cout << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // a1. average number in each queue
     // a2. maximum number in each queue
     {
@@ -265,13 +260,13 @@ int main() {
 
             avg_number = (avg_number * temp_simclock + (double) current_number * (simclock - temp_simclock)) / simclock;
 
-            cerr << "Average Number of People in Station " << st_num << " is: " << avg_number << "\n";
-            cerr << "Maximum Number of People in Station " << st_num << " is: " << max_number << "\n";
+            cout << "Average Number of People in Station " << st_num << " is: " << avg_number << "\n";
+            cout << "Maximum Number of People in Station " << st_num << " is: " << max_number << "\n";
         }
     }
-    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
+    cout << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
 
-    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
+    cout << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // b1. average delay in each queue
     // b2. maximum delay in each queue
     for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
@@ -283,12 +278,12 @@ int main() {
             max_delay = max(max_delay, temp_delay);
             avg_delay = (avg_delay * i + temp_delay) / (i + 1);
         }
-        cerr << "Average Delay for Station " << st_num << " is: " << avg_delay << " minutes\n";
-        cerr << "Maximum Delay for Station " << st_num << " is: " << max_delay << " minutes\n";
+        cout << "Average Delay for Station " << st_num << " is: " << avg_delay << " minutes\n";
+        cout << "Maximum Delay for Station " << st_num << " is: " << max_delay << " minutes\n";
     }
-    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
+    cout << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
 
-    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
+    cout << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // c1. average number on the bus
     // c2. maximum number on the bus
     {   
@@ -322,12 +317,12 @@ int main() {
 
         avg_number = (avg_number * temp_simclock + (double) current_number * (simclock - temp_simclock)) / simclock;
 
-        cerr << "Average Number of People in Bus is: " << avg_number << "\n";
-        cerr << "Maximum Number of People in Bus is: " << max_number << "\n";
+        cout << "Average Number of People in Bus is: " << avg_number << "\n";
+        cout << "Maximum Number of People in Bus is: " << max_number << "\n";
     }
-    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
+    cout << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
 
-    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
+    cout << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // d1. average time the bus is stopped at each location 
     // d2. maximum time the bus is stopped at each location 
     // d3. minimum time the bus is stopped at each location 
@@ -335,18 +330,18 @@ int main() {
         double min_time_at_station = bus.min_time_at_station[st_num];
         double max_time_at_station = bus.max_time_at_station[st_num];
         double avg_time_at_station = bus.avg_time_at_station[st_num];
-        cerr << "Average time bus stopped at station " << st_num << " is: " << avg_time_at_station << " minutes\n";
-        cerr << "Maximum time bus stopped at station " << st_num << " is: " << max_time_at_station << " minutes\n";
-        cerr << "Minimum time bus stopped at station " << st_num << " is: " << min_time_at_station << " minutes\n";
+        cout << "Average time bus stopped at station " << st_num << " is: " << avg_time_at_station << " minutes\n";
+        cout << "Maximum time bus stopped at station " << st_num << " is: " << max_time_at_station << " minutes\n";
+        cout << "Minimum time bus stopped at station " << st_num << " is: " << min_time_at_station << " minutes\n";
     }
-    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
+    cout << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
 
-    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
+    cout << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // e1. average time for the bus to make a loop
     // e2. maximum time for the bus to make a loop
     // e3. minimum time for the bus to make a loop
     if (bus.timestamps_depart_from_car_rental.size() <= 1) {
-        cerr << "The bus did not make any single loop\n";
+        cout << "The bus did not make any single loop\n";
     } else {
         double avg_loop_time = 0.0;
         double max_loop_time = 0.0;
@@ -357,14 +352,14 @@ int main() {
             max_loop_time = max(max_loop_time, loop_time);
             min_loop_time = min(min_loop_time, loop_time);
         }
-        cerr << "Average bus loop time is: " << avg_loop_time << " minutes\n";
-        cerr << "Maximum bus loop time is: " << max_loop_time << " minutes\n";
-        cerr << "Minimum bus loop time is: " << min_loop_time << " minutes\n";
+        cout << "Average bus loop time is: " << avg_loop_time << " minutes\n";
+        cout << "Maximum bus loop time is: " << max_loop_time << " minutes\n";
+        cout << "Minimum bus loop time is: " << min_loop_time << " minutes\n";
     }
 
-    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
+    cout << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
 
-    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
+    cout << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n";
     // f1. average time a person is in the system by arrival location
     // f2. maximum time a person is in the system by arrival location
     // f3. minimum time a person is in the system by arrival location
@@ -391,12 +386,12 @@ int main() {
         }
 
         for (int st_num = 1; st_num <= NUM_OF_STATION; st_num++) {
-            cerr << "Average time the people from station " << st_num << " in the system is: " << avg_time[st_num] << " minutes\n";
-            cerr << "Maximum time a person from station " << st_num << " in the system is: " << max_time[st_num] << " minutes\n";
-            cerr << "Minimum time a person from station " << st_num << " in the system is: " << min_time[st_num] << " minutes\n";
+            cout << "Average time the people from station " << st_num << " in the system is: " << avg_time[st_num] << " minutes\n";
+            cout << "Maximum time a person from station " << st_num << " in the system is: " << max_time[st_num] << " minutes\n";
+            cout << "Minimum time a person from station " << st_num << " in the system is: " << min_time[st_num] << " minutes\n";
         }
     }
-    cerr << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
+    cout << "[++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]\n\n";
     
 
 
