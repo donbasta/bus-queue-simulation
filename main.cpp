@@ -363,7 +363,7 @@ int main() {
         double avg_time[NUM_OF_STATION + 1];
         double max_time[NUM_OF_STATION + 1];
         double min_time[NUM_OF_STATION + 1];
-        int count[NUM_OF_STATION];
+        double count[NUM_OF_STATION + 1];
         for (int i = 1; i <= NUM_OF_STATION; i++) {
             avg_time[i] = 0.0;
             max_time[i] = 0.0;
