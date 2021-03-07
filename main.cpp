@@ -124,7 +124,7 @@ struct Bus {
 
         double time_in_station = simclock - initialclock;
         min_time_at_station[st_num] = min(min_time_at_station[st_num], time_in_station);
-        max_time_at_station[st_num] = max(min_time_at_station[st_num], time_in_station);
+        max_time_at_station[st_num] = max(max_time_at_station[st_num], time_in_station);
         avg_time_at_station[st_num] = (avg_time_at_station[st_num] * num_at_station[st_num] + time_in_station) / (num_at_station[st_num] + 1);
         num_at_station[st_num]++;
     }
@@ -218,7 +218,7 @@ int main() {
         //arrived at station 3
         bus.transit(station[3]);
         if (simclock >= MAX_TIME) break;
-        // cout << "[+] " << simclock << '\n';
+        cout << "[+] " << simclock << '\n';
     }
     cout << "FINISHED";
     cout << "\n-------------------------------------------------\n";
