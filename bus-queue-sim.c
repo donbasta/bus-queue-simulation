@@ -59,9 +59,9 @@ const int next_station[NUM_STATION + 1] = {0, 2, 3, 1};
 
 const double distance_to_station[NUM_STATION + 1] = {
     0.0,
-    DISTANCE_12,
-    DISTANCE_23,
     DISTANCE_31,
+    DISTANCE_12,
+    DISTANCE_23
 };
 
 const int station_event[NUM_STATION + 1] = {
@@ -81,7 +81,7 @@ const double avg_arrival_time_stations[NUM_STATION + 1] = {
 
 /* Declare Global Variables */
 Station station[NUM_STATION + 1];
-int last_depart_from_station_3 = 0;
+double last_depart_from_station_3 = 0.0;
 
 
 /* Declare non-simlib functions. */
@@ -167,7 +167,7 @@ void report(void)  /* Report generator function. */
     out_sampst(outfile, SAMPST_DELAY_STATION[1], SAMPST_DELAY_STATION[NUM_STATION]);
 
     // SOAL 3: Rata-rata dan maksimal orang di bus
-    fprintf(outfile, "Bus Capacity Statistics\n");
+    fprintf(outfile, "Bus Passengers Statistics\n");
     out_timest(outfile, TIMEST_BUS_CAPACITY, TIMEST_BUS_CAPACITY);
 
     // SOAL 4: Rata-rata, maksimal, dan minimal waktu bus berhenti di setiap station
@@ -179,7 +179,7 @@ void report(void)  /* Report generator function. */
     out_sampst(outfile, SAMPST_BUS_LOOP, SAMPST_BUS_LOOP);
 
     // SOAL 6: Rata-rata, maksimal, dan minimal setiap orang berada dalam sistem (mulai dari datang di lokasi awal hingga tiba di lokasi tujuan)
-    fprintf(outfile, "Duration people in the system by arrival station (in minutes)\n");
+    fprintf(outfile, "Duration people in the system by departure station (in minutes)\n");
     out_sampst(outfile, SAMPST_TIME_PEOPLE_IN_SYSTEM[1], SAMPST_TIME_PEOPLE_IN_SYSTEM[NUM_STATION]);
 }
 
@@ -192,13 +192,13 @@ void transit(int st_num) {
         list_remove(FIRST, st_num);
         int station_arrival = transfer[1];
         int system_arrival = transfer[2];
-        sampst(sim_time - system_arrival, SAMPST_TIME_PEOPLE_IN_SYSTEM[station_arrival]);
 
         // bus statistics
         timest(get_bus_size(), TIMEST_BUS_CAPACITY);
         double unload_time = uniform(16, 24, STREAM_UNLOAD) / 60.0;
         event_schedule(sim_time + unload_time, EVENT_UNLOAD);
         timing();
+        sampst(sim_time - system_arrival, SAMPST_TIME_PEOPLE_IN_SYSTEM[station_arrival]);
         dep_time = max(dep_time, sim_time);
     }
     // load
@@ -210,7 +210,6 @@ void transit(int st_num) {
         transfer[1] = st_num; // stasiun keberangkatan
         transfer[2] = station[st_num].queue_line[station[st_num].frontid]; // waktu nyampe di sistem
         transfer[3] = sim_time; // waktu dia naik
-        // printf("delay %.2lf\n", delay);
         list_file(LAST, generate_destination_from_station(st_num));
         station[st_num].queue_line_out[station[st_num].frontid] = sim_time;
         
